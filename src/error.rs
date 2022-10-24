@@ -13,9 +13,3 @@ pub enum KolliderClientError {
     #[error("KolliderClientError - DecodeError: {0}")]
     DecodeError(#[from] DecodeError),
 }
-
-// impl Display for KolliderClientError {
-//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-//         Ok(())
-//     }
-// }
