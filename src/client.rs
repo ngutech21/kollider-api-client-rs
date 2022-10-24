@@ -6,6 +6,8 @@ use reqwest::Client;
 use chrono::Utc;
 use ring::hmac;
 
+use crate::error::KolliderClientError;
+
 use super::model::*;
 
 #[derive(Clone)]
@@ -33,37 +35,38 @@ impl<'a> KolliderClient<'a> {
         }
     }
 
-    // FIXME wrap result
-    fn create_headers(&self, path: &str) -> HeaderMap {
+    fn create_headers(&self, path: &str) -> Result<HeaderMap, KolliderClientError> {
         let timestamp: i64 = Utc::now().timestamp();
-        let sig = Self::generate_signature(timestamp, self.secret, path, "GET");
+        let sig = Self::generate_signature(timestamp, self.secret, path, "GET")?;
 
         let mut header = HeaderMap::new();
-        header.append("k-signature", HeaderValue::from_str(sig.as_str()).unwrap());
+        header.append("k-signature", HeaderValue::from_str(sig.as_str())?);
 
         header.append(
             "k-timestamp",
-            HeaderValue::from_str(&format!("{}", timestamp)).unwrap(),
+            HeaderValue::from_str(&format!("{}", timestamp))?,
         );
-        header.append(
-            "k-passphrase",
-            HeaderValue::from_str(self.passphrase).unwrap(),
-        );
-        header.append("k-api-key", HeaderValue::from_str(self.api_key).unwrap());
-        header
+        header.append("k-passphrase", HeaderValue::from_str(self.passphrase)?);
+        header.append("k-api-key", HeaderValue::from_str(self.api_key)?);
+        Ok(header)
     }
 
-    fn generate_signature(timestamp: i64, secretb64: &str, path: &str, method: &str) -> String {
+    fn generate_signature(
+        timestamp: i64,
+        secretb64: &str,
+        path: &str,
+        method: &str,
+    ) -> Result<String, KolliderClientError> {
         let pre_hash = format!("{}{}{}", timestamp, method, path);
-        let res = BASE64.decode(secretb64.as_bytes()).unwrap();
+        let res = BASE64.decode(secretb64.as_bytes())?;
         let key = hmac::Key::new(hmac::HMAC_SHA256, &res);
         let signature = hmac::sign(&key, pre_hash.as_bytes());
         let sig_encoded = BASE64.encode(signature.as_ref());
         println!("sig: {:?}", sig_encoded);
-        sig_encoded
+        Ok(sig_encoded)
     }
 
-    pub async fn get_price_ticker(&self) -> Result<PriceTicker, reqwest::Error> {
+    pub async fn get_price_ticker(&self) -> Result<PriceTicker, KolliderClientError> {
         let path = "market/ticker?symbol=BTCUSD.PERP";
         let req = self
             .client
@@ -71,29 +74,28 @@ impl<'a> KolliderClient<'a> {
             .send()
             .await?;
 
-        req.json::<PriceTicker>().await
+        Ok(req.json::<PriceTicker>().await.unwrap())
     }
 
-    pub async fn get_products(&self) -> Result<Products, reqwest::Error> {
+    pub async fn get_products(&self) -> Result<Products, KolliderClientError> {
         let res = self
             .client
             .get("https://api.kollider.xyz/v1/market/products")
             .send()
             .await?;
 
-        res.json::<Products>().await
+        Ok(res.json::<Products>().await.unwrap())
     }
 
-    pub async fn get_user_balances(&self) -> Result<UserBalances, reqwest::Error> {
+    pub async fn get_user_balances(&self) -> Result<UserBalances, KolliderClientError> {
         let path = "/user/balances";
         let res = self
             .client
             .get("https://api.kollider.xyz/v1/user/balances")
-            .headers(Self::create_headers(self, path))
+            .headers(Self::create_headers(self, path)?)
             .send()
             .await?;
 
-        res.json::<UserBalances>().await
-        //let result = res.unwrap().text().await;
+        Ok(res.json::<UserBalances>().await.unwrap())
     }
 }

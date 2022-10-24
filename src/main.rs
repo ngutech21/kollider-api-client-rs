@@ -3,6 +3,7 @@
 // #![allow(unused_imports)]
 
 mod client;
+mod error;
 use client::*;
 mod model;
 
