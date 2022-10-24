@@ -78,9 +78,10 @@ impl<'a> KolliderClient<'a> {
     }
 
     pub async fn get_products(&self) -> Result<Products, KolliderClientError> {
+        let path = "market/products";
         let res = self
             .client
-            .get("https://api.kollider.xyz/v1/market/products")
+            .get(format!("{}{}", self.base_url, path))
             .send()
             .await?;
 
@@ -91,7 +92,7 @@ impl<'a> KolliderClient<'a> {
         let path = "/user/balances";
         let res = self
             .client
-            .get("https://api.kollider.xyz/v1/user/balances")
+            .get(format!("{}{}", self.base_url, path))
             .headers(Self::create_headers(self, path)?)
             .send()
             .await?;
