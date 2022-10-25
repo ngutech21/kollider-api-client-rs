@@ -29,6 +29,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let products = client.get_products().await?;
     println!("products: {:?}", products);
 
+    // let order = client.create_order().await?;
+    // println!("order: {:?}", order);
+
+    let pos = client.get_open_positions().await?;
+    println!("pos: {:?}", pos);
+
     Ok(())
 }
 

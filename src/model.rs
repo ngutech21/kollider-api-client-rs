@@ -51,4 +51,36 @@ pub struct Cash {
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Order {
+    pub price: i64,
+    pub order_type: String,
+    pub side: String,
+    pub quantity: i64,
+    pub symbol: String,
+    pub leverage: i64,
+    pub margin_type: String,
+    pub settlement_type: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct IsolatedMargin {}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct OpenPositions {
+    #[serde(rename = "BTCUSD.PERP")]
+    pub btcusd_perp: BtcusdPerp,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct BtcusdPerp {
+    pub uid: i64,
+    pub timestamp: i64,
+    pub symbol: String,
+    pub upnl: String,
+    pub leverage: String,
+    pub entry_price: String,
+    pub side: String,
+    pub quantity: String,
+    pub liq_price: String,
+    pub open_order_ids: Vec<i32>,
+}
