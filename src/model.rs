@@ -89,3 +89,16 @@ pub struct BtcusdPerp {
 pub struct PaymentRequest {
     pub payment_request: String,
 }
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CreateOrderResult {
+    pub timestamp: i64,
+    pub order_id: i64,
+    pub ext_order_id: String,
+    pub uid: i64,
+    pub symbol: String,
+    pub quantity: i64,
+    pub order_type: String,
+    pub price: i64,
+    pub leverage: i64,
+}

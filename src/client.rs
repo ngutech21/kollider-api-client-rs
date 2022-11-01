@@ -135,23 +135,27 @@ impl<'a> KolliderClient<'a> {
             .headers(Self::create_get_headers(self, path)?)
             .send()
             .await?;
-
+        //println!("open pos: {}", res.text().await?);
         Ok(res.json::<OpenPositions>().await?)
     }
 
-    pub async fn create_order(&self) -> Result<String, KolliderClientError> {
+    pub async fn create_order(
+        &self,
+        amount_usd: i8,
+    ) -> Result<CreateOrderResult, KolliderClientError> {
         let path = "/orders";
 
-        let mut body: HashMap<String, String> = HashMap::new();
-        body.insert("price".to_string(), "19598.0".to_string());
-        body.insert("order_type".to_string(), "Limit".to_string());
-        body.insert("side".to_string(), "Bid".to_string());
-        body.insert("quantity".to_string(), "1".to_string());
-        body.insert("symbol".to_string(), "BTCUSD.PERP".to_string());
-        body.insert("leverage".to_string(), "10".to_string());
-        body.insert("margin_type".to_string(), "Isolated".to_string());
-        body.insert("settlement_type".to_string(), "Delayed".to_string());
-        let request_body = serde_json::to_string(&body)?;
+        let request_body = serde_json::json!({
+            "price": 20595,
+            "order_type": "Market",
+            "side": "Ask",
+            "quantity": amount_usd,
+            "symbol": "BTCUSD.PERP",
+            "leverage": 20,
+            "margin_type": "Isolated",
+            "settlement_type": "Delayed"
+        })
+        .to_string();
 
         println!("request body: {}", request_body);
 
@@ -162,10 +166,9 @@ impl<'a> KolliderClient<'a> {
             .body(request_body)
             .send()
             .await?;
-        let st = res.status();
 
-        let result = res.text().await?;
-        println!("order result {:?} {:?}", result, st.to_string());
+        let result = res.json::<CreateOrderResult>().await?;
+        //println!("order result {}", result);
         Ok(result)
     }
 

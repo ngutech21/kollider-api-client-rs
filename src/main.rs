@@ -32,22 +32,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let deposit = client.make_deposit(100).await?;
     // println!("order: {:?}", deposit.payment_request);
 
-    let order = client.create_order().await?;
-    println!("order: {:?}", order);
+    // let order = client.create_order(1).await?;
+    // println!("order id: {} ext: {}", order.order_id, order.ext_order_id);
 
-    // let pos = client.get_open_positions().await?;
-    // println!("pos: {:?}", pos);
-    //rust 1666694875POST/wallet/deposit{"amount":"100","type":"Ln"}
-    //py   1666694805POST/wallet/deposit{"amount":"100","type":"Ln"}
-
-    //{"k-signature": "nLwhx1jZeqjBrBXPo8JDKAPrWlTZzmRhWmoQX8MmMQs=",
-    //"k-timestamp": "1666695351", "k-passphrase":
-    //"pass987", "k-api-key": "YtUuYfPXE4r8mQhHBkAs8A=="}
-
-    //{'k-signature': 'Y5fKo3Qm+/Ok7dlP1vQdkREdUeQBvvT5f+Gh0lZ/V/w=',
-    //  'k-timestamp': '1666695172',
-    //  'k-passphrase': 'pass987',
-    //  'k-api-key': 'YtUuYfPXE4r8mQhHBkAs8A=='}
+    let pos = client.get_open_positions().await?;
+    println!("pos: {:?}", pos);
 
     Ok(())
 }
