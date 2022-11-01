@@ -14,12 +14,9 @@ use std::fs;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let base_url = "https://testnet.kollider.xyz/v1";
-
     let cfg = load_config()?;
     println!("config: {:?}", cfg);
-
-    let client = KolliderClient::new(base_url, &cfg.api_key, &cfg.passphrase, &cfg.secret);
+    let client = KolliderClient::new(&cfg.url, &cfg.api_key, &cfg.passphrase, &cfg.secret);
     // let prices = client.get_price_ticker().await?;
     // println!("prices: {:?}", prices.last_price);
 
@@ -51,6 +48,7 @@ fn load_config() -> Result<KolliderClientConfig, Box<dyn std::error::Error>> {
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 struct KolliderClientConfig {
+    url: String,
     api_key: String,
     passphrase: String,
     secret: String,
