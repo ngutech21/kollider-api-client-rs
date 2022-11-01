@@ -1,5 +1,6 @@
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
+use serde_json::Value;
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Products {
@@ -101,4 +102,30 @@ pub struct CreateOrderResult {
     pub order_type: String,
     pub price: i64,
     pub leverage: i64,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct OpenOrders {
+    #[serde(rename = "BTCUSD.PERP")]
+    pub btcusd_perp: Vec<OpenOrderBtcusdPerp>,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct OpenOrderBtcusdPerp {
+    pub order_id: i64,
+    pub uid: i64,
+    pub price: i64,
+    pub timestamp: i64,
+    pub filled: i64,
+    pub ext_order_id: String,
+    pub order_type: String,
+    pub advanced_order_type: Value,
+    pub trigger_price_type: Value,
+    pub side: String,
+    pub quantity: i64,
+    pub symbol: String,
+    pub leverage: i64,
+    pub margin_type: String,
+    pub settlement_type: String,
+    pub origin: String,
 }

@@ -116,7 +116,7 @@ impl<'a> KolliderClient<'a> {
         Ok(res.json::<UserBalances>().await?)
     }
 
-    pub async fn get_open_orders(&self) -> Result<String, KolliderClientError> {
+    pub async fn get_open_orders(&self) -> Result<OpenOrders, KolliderClientError> {
         let path = "/orders/open";
         let res = self
             .client
@@ -124,7 +124,8 @@ impl<'a> KolliderClient<'a> {
             .headers(Self::create_get_headers(self, path)?)
             .send()
             .await?;
-        Ok(res.text().await?)
+        //Ok(res.text().await?)
+        Ok(res.json::<OpenOrders>().await?)
     }
 
     pub async fn get_open_positions(&self) -> Result<OpenPositions, KolliderClientError> {

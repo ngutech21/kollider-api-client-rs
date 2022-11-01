@@ -35,8 +35,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let order = client.create_order(1).await?;
     // println!("order id: {} ext: {}", order.order_id, order.ext_order_id);
 
-    let pos = client.get_open_positions().await?;
-    println!("pos: {:?}", pos);
+    // let pos = client.get_open_positions().await?;
+    // println!("pos: {:?}", pos);
+
+    let order = client.get_open_orders().await?;
+    println!("pos: {:?}", order);
 
     Ok(())
 }
