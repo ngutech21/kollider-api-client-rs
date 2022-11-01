@@ -84,3 +84,8 @@ pub struct BtcusdPerp {
     pub liq_price: String,
     pub open_order_ids: Vec<i32>,
 }
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct PaymentRequest {
+    pub payment_request: String,
+}
