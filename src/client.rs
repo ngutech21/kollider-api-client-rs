@@ -106,6 +106,17 @@ impl<'a> KolliderClient<'a> {
         Ok(res.json::<UserBalances>().await?)
     }
 
+    pub async fn get_user_account(&self) -> Result<UserAccount, KolliderClientError> {
+        let path = "/user/account";
+        let res = self
+            .client
+            .get(format!("{}{}", self.base_url, path))
+            .headers(Self::create_get_headers(self, path)?)
+            .send()
+            .await?;
+        Ok(res.json::<UserAccount>().await?)
+    }
+
     pub async fn get_open_orders(&self) -> Result<OpenOrders, KolliderClientError> {
         let path = "/orders/open";
         let res = self

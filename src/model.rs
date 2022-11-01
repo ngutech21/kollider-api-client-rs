@@ -129,3 +129,19 @@ pub struct OpenOrderBtcusdPerp {
     pub settlement_type: String,
     pub origin: String,
 }
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct UserAccount {
+    pub created_at: CreatedAt,
+    pub email: String,
+    pub lnauth_enabled: bool,
+    pub user_type: String,
+    pub username: String,
+    pub validated_email: bool,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CreatedAt {
+    pub nanos_since_epoch: i64,
+    pub secs_since_epoch: i64,
+}

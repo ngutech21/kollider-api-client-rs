@@ -37,9 +37,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let order = client.get_open_orders().await?;
     // println!("pos: {:?}", order);
 
-    let request = "lntXXX";
-    let withdrawal = client.make_withdrawal(1000, request).await?;
-    println!("order: {:?}", withdrawal);
+    // let request = "lntXXX";
+    // let withdrawal = client.make_withdrawal(1000, request).await?;
+    // println!("order: {:?}", withdrawal);
+
+    let account = client.get_user_account().await?;
+    println!("order: {:?}", account);
 
     Ok(())
 }

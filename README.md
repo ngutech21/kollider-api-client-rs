@@ -2,12 +2,29 @@
 
 ## Progress ##
 
-- [x] get products
-- [] get orderbook
+### Market ###
+
+- [ ] get orderbook
 - [x] get ticker
-- [] get historical index prices
-- [x] post deposit
-- [] post withdrawal
+- [ ] get historical index prices
+
+### Account ###
+
 - [x] get accountinfo
-- [x] post order
-- [x] get open position
+- [x] deposit funds
+- [x] withdraw funds
+
+### Trading ###
+
+- [ ] get order fill
+- [ ] get historical orders
+- [x] create order
+- [ ] cancel order
+- [x] get open positions
+- [ ] get open orders
+- [ ] get preflight order info
+- [ ] change margin of a position
+
+### Products ###
+
+- [x] get products
