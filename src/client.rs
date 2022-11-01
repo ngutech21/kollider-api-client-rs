@@ -176,4 +176,28 @@ impl<'a> KolliderClient<'a> {
             .await?;
         Ok(res.json::<PaymentRequest>().await?)
     }
+
+    pub async fn make_withdrawal(
+        &self,
+        amount: i32,
+        payment_request: &str,
+    ) -> Result<String, KolliderClientError> {
+        let path = "/wallet/withdrawal";
+
+        let request_body = serde_json::json!({
+            "type": "Ln",
+            "payment_request": payment_request,
+            "amount": amount,
+        })
+        .to_string();
+
+        let res = self
+            .client
+            .post(format!("{}{}", self.base_url, path))
+            .headers(Self::create_post_headers(self, path, &request_body)?)
+            .body(request_body)
+            .send()
+            .await?;
+        Ok(res.text().await?)
+    }
 }
