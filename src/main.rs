@@ -15,7 +15,6 @@ use std::fs;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cfg = load_config()?;
-    println!("config: {:?}", cfg);
     let client = KolliderClient::new(&cfg.url, &cfg.api_key, &cfg.passphrase, &cfg.secret);
     // let prices = client.get_price_ticker().await?;
     // println!("prices: {:?}", prices.last_price);

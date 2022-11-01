@@ -1,8 +1,8 @@
 use data_encoding::DecodeError;
 use reqwest::header::InvalidHeaderValue;
+use serde_json::error::Error as SerdeError;
 use thiserror::Error;
 
-use serde_json::error::Error as SerdeError;
 #[derive(Error, Debug)]
 pub enum KolliderClientError {
     #[error("KolliderClientError - Reqwest: {0}")]

@@ -1,16 +1,11 @@
-use std::collections::HashMap;
-
+#![allow(dead_code)]
+use super::model::*;
+use crate::error::KolliderClientError;
+use chrono::{SecondsFormat, Utc};
 use data_encoding::BASE64;
-
 use reqwest::header::{HeaderMap, HeaderValue, CONTENT_TYPE};
 use reqwest::Client;
-
-use chrono::{SecondsFormat, Utc};
 use ring::hmac;
-
-use crate::error::KolliderClientError;
-
-use super::model::*;
 
 #[derive(Clone)]
 pub struct KolliderClient<'a> {
@@ -49,8 +44,6 @@ impl<'a> KolliderClient<'a> {
         header.append("k-timestamp", HeaderValue::from_str(timestamp)?);
         header.append("k-passphrase", HeaderValue::from_str(self.passphrase)?);
         header.append("k-api-key", HeaderValue::from_str(self.api_key)?);
-
-        println!("header: {:?}", header);
         Ok(header)
     }
 
@@ -68,7 +61,6 @@ impl<'a> KolliderClient<'a> {
     ) -> Result<HeaderMap, KolliderClientError> {
         let timestamp = Utc::now().to_rfc3339_opts(SecondsFormat::Millis, true);
         let pre_hash = format!("{}{}{}{}", timestamp, "POST", path, body);
-        println!("pre_hash: {}", pre_hash);
         let sig = Self::generate_signature(self.secret, &pre_hash)?;
         Self::create_headers(self, &timestamp, &sig)
     }
@@ -78,7 +70,6 @@ impl<'a> KolliderClient<'a> {
         let key = hmac::Key::new(hmac::HMAC_SHA256, &res);
         let signature = hmac::sign(&key, pre_hash.as_bytes());
         let sig_encoded = BASE64.encode(signature.as_ref());
-        println!("sig: {:?}", sig_encoded);
         Ok(sig_encoded)
     }
 
@@ -112,7 +103,6 @@ impl<'a> KolliderClient<'a> {
             .headers(Self::create_get_headers(self, path)?)
             .send()
             .await?;
-
         Ok(res.json::<UserBalances>().await?)
     }
 
@@ -124,7 +114,6 @@ impl<'a> KolliderClient<'a> {
             .headers(Self::create_get_headers(self, path)?)
             .send()
             .await?;
-        //Ok(res.text().await?)
         Ok(res.json::<OpenOrders>().await?)
     }
 
@@ -136,7 +125,6 @@ impl<'a> KolliderClient<'a> {
             .headers(Self::create_get_headers(self, path)?)
             .send()
             .await?;
-        //println!("open pos: {}", res.text().await?);
         Ok(res.json::<OpenPositions>().await?)
     }
 
@@ -158,8 +146,6 @@ impl<'a> KolliderClient<'a> {
         })
         .to_string();
 
-        println!("request body: {}", request_body);
-
         let res = self
             .client
             .post(format!("{}{}", self.base_url, path))
@@ -169,7 +155,6 @@ impl<'a> KolliderClient<'a> {
             .await?;
 
         let result = res.json::<CreateOrderResult>().await?;
-        //println!("order result {}", result);
         Ok(result)
     }
 
@@ -189,8 +174,6 @@ impl<'a> KolliderClient<'a> {
             .body(request_body)
             .send()
             .await?;
-        println!("{:?}", res);
-
         Ok(res.json::<PaymentRequest>().await?)
     }
 }
