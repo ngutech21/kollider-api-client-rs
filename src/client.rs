@@ -46,10 +46,7 @@ impl<'a> KolliderClient<'a> {
         header.append(CONTENT_TYPE, HeaderValue::from_str("application/json")?);
         header.append("k-signature", HeaderValue::from_str(signature)?);
 
-        header.append(
-            "k-timestamp",
-            HeaderValue::from_str(timestamp)?, // FIXME
-        );
+        header.append("k-timestamp", HeaderValue::from_str(timestamp)?);
         header.append("k-passphrase", HeaderValue::from_str(self.passphrase)?);
         header.append("k-api-key", HeaderValue::from_str(self.api_key)?);
 
@@ -86,25 +83,25 @@ impl<'a> KolliderClient<'a> {
     }
 
     pub async fn get_price_ticker(&self) -> Result<PriceTicker, KolliderClientError> {
-        let path = "market/ticker?symbol=BTCUSD.PERP";
+        let path = "/market/ticker?symbol=BTCUSD.PERP";
         let req = self
             .client
             .get(format!("{}{}", self.base_url, path))
             .send()
             .await?;
 
-        Ok(req.json::<PriceTicker>().await.unwrap())
+        Ok(req.json::<PriceTicker>().await?)
     }
 
     pub async fn get_products(&self) -> Result<Products, KolliderClientError> {
-        let path = "market/products";
+        let path = "/market/products";
         let res = self
             .client
             .get(format!("{}{}", self.base_url, path))
             .send()
             .await?;
 
-        Ok(res.json::<Products>().await.unwrap())
+        Ok(res.json::<Products>().await?)
     }
 
     pub async fn get_user_balances(&self) -> Result<UserBalances, KolliderClientError> {
@@ -116,7 +113,7 @@ impl<'a> KolliderClient<'a> {
             .send()
             .await?;
 
-        Ok(res.json::<UserBalances>().await.unwrap())
+        Ok(res.json::<UserBalances>().await?)
     }
 
     pub async fn get_open_orders(&self) -> Result<String, KolliderClientError> {
@@ -127,7 +124,7 @@ impl<'a> KolliderClient<'a> {
             .headers(Self::create_get_headers(self, path)?)
             .send()
             .await?;
-        Ok(res.text().await.unwrap())
+        Ok(res.text().await?)
     }
 
     pub async fn get_open_positions(&self) -> Result<OpenPositions, KolliderClientError> {
@@ -139,7 +136,7 @@ impl<'a> KolliderClient<'a> {
             .send()
             .await?;
 
-        Ok(res.json::<OpenPositions>().await.unwrap())
+        Ok(res.json::<OpenPositions>().await?)
     }
 
     pub async fn create_order(&self) -> Result<String, KolliderClientError> {
@@ -154,7 +151,7 @@ impl<'a> KolliderClient<'a> {
         body.insert("leverage".to_string(), "10".to_string());
         body.insert("margin_type".to_string(), "Isolated".to_string());
         body.insert("settlement_type".to_string(), "Delayed".to_string());
-        let request_body = serde_json::to_string(&body).unwrap(); // FIXME
+        let request_body = serde_json::to_string(&body)?;
 
         println!("request body: {}", request_body);
 
@@ -167,7 +164,7 @@ impl<'a> KolliderClient<'a> {
             .await?;
         let st = res.status();
 
-        let result = res.text().await.unwrap();
+        let result = res.text().await?;
         println!("order result {:?} {:?}", result, st.to_string());
         Ok(result)
     }
@@ -190,6 +187,6 @@ impl<'a> KolliderClient<'a> {
             .await?;
         println!("{:?}", res);
 
-        Ok(res.json::<PaymentRequest>().await.unwrap())
+        Ok(res.json::<PaymentRequest>().await?)
     }
 }
