@@ -34,8 +34,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let pos = client.get_open_positions().await?;
     // println!("pos: {:?}", pos);
 
+    // 120483305
+    // 120530109
     // let order = client.get_open_orders().await?;
     // println!("pos: {:?}", order);
+
+    let order = client.cancel_order(120530417).await?;
+    println!("pos: {:?}", order);
 
     // let request = "lntXXX";
     // let withdrawal = client.make_withdrawal(1000, request).await?;
@@ -44,8 +49,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // let account = client.get_user_account().await?;
     // println!("order: {:?}", account);
 
-    let margin = client.change_margin("Add", 21).await?;
-    println!("margin: {:?}", margin);
+    // let margin = client.change_margin("Delete", 10000).await?;
+    // println!("margin: {:?}", margin);
 
     Ok(())
 }

@@ -19,9 +19,9 @@
 - [ ] get order fill
 - [ ] get historical orders
 - [x] create order
-- [ ] cancel order
+- [x] cancel order
 - [x] get open positions
-- [ ] get open orders
+- [x] get open orders
 - [ ] get preflight order info
 - [x] change margin of a position
 

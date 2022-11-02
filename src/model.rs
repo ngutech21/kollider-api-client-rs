@@ -153,3 +153,13 @@ pub struct ChangeMarginResult {
     pub symbol: String,
     pub amount: String,
 }
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CancelOrderResult {
+    pub timestamp: i64,
+    pub reason: String,
+    pub order_id: i64,
+    pub symbol: String,
+    pub order_type: String,
+    pub uid: i64,
+}

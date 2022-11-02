@@ -65,6 +65,17 @@ impl<'a> KolliderClient<'a> {
         Self::create_headers(self, &timestamp, &sig)
     }
 
+    fn create_delete_headers(
+        &self,
+        path: &str,
+        auth_body: &str,
+    ) -> Result<HeaderMap, KolliderClientError> {
+        let timestamp = Utc::now().to_rfc3339_opts(SecondsFormat::Millis, true);
+        let pre_hash = format!("{}{}{}{}", timestamp, "DELETE", path, auth_body);
+        let sig = Self::generate_signature(self.secret, &pre_hash)?;
+        Self::create_headers(self, &timestamp, &sig)
+    }
+
     fn generate_signature(secretb64: &str, pre_hash: &str) -> Result<String, KolliderClientError> {
         let res = BASE64.decode(secretb64.as_bytes())?;
         let key = hmac::Key::new(hmac::HMAC_SHA256, &res);
@@ -167,6 +178,32 @@ impl<'a> KolliderClient<'a> {
 
         let result = res.json::<CreateOrderResult>().await?;
         Ok(result)
+    }
+
+    pub async fn cancel_order(
+        &self,
+        order_id: i32,
+    ) -> Result<CancelOrderResult, KolliderClientError> {
+        let path = "/orders";
+
+        let auth_body = serde_json::json!({
+            "order_id": order_id,
+            "symbol": "BTCUSD.PERP",
+        })
+        .to_string();
+
+        println!("path={}", path);
+        let res = self
+            .client
+            .delete(format!(
+                "{}{}?symbol=BTCUSD.PERP&order_id={}",
+                self.base_url, path, order_id
+            ))
+            .headers(Self::create_delete_headers(self, path, &auth_body)?)
+            .send()
+            .await?;
+
+        Ok(res.json::<CancelOrderResult>().await?)
     }
 
     pub async fn make_deposit(&self, sats: i32) -> Result<PaymentRequest, KolliderClientError> {
