@@ -211,4 +211,31 @@ impl<'a> KolliderClient<'a> {
             .await?;
         Ok(res.text().await?)
     }
+
+    pub async fn change_margin(
+        &self,
+        action: &str,
+        amount_sats: i32,
+    ) -> Result<ChangeMarginResult, KolliderClientError> {
+        let path = "/change_margin";
+
+        // action: Add Delete
+        // amount in sats
+
+        let request_body = serde_json::json!({
+            "symbol": "BTCUSD.PERP",
+            "action": action,
+            "amount": amount_sats,
+        })
+        .to_string();
+
+        let res = self
+            .client
+            .post(format!("{}{}", self.base_url, path))
+            .headers(Self::create_post_headers(self, path, &request_body)?)
+            .body(request_body)
+            .send()
+            .await?;
+        Ok(res.json::<ChangeMarginResult>().await?)
+    }
 }

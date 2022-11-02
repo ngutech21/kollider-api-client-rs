@@ -23,7 +23,7 @@
 - [x] get open positions
 - [ ] get open orders
 - [ ] get preflight order info
-- [ ] change margin of a position
+- [x] change margin of a position
 
 ### Products ###
 

@@ -145,3 +145,11 @@ pub struct CreatedAt {
     pub nanos_since_epoch: i64,
     pub secs_since_epoch: i64,
 }
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct ChangeMarginResult {
+    pub ext_id: String,
+    pub uid: i64,
+    pub symbol: String,
+    pub amount: String,
+}
