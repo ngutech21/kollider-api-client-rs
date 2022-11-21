@@ -5,11 +5,11 @@ use serde_json::Value;
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Products {
     #[serde(rename = "ETHUSD.PERP")]
-    pub ethusd_perp: Product,
+    pub ethusd_perp: Option<Product>,
     #[serde(rename = "BTCUSD.PERP")]
-    pub btcusd_perp: Product,
+    pub btcusd_perp: Option<Product>,
     #[serde(rename = "BTCEUR.PERP")]
-    pub btceur_perp: Product,
+    pub btceur_perp: Option<Product>,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
