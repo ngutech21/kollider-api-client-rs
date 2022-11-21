@@ -1,3 +1,5 @@
+use std::fs;
+
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 use serde_json::Value;
@@ -162,4 +164,21 @@ pub struct CancelOrderResult {
     pub symbol: String,
     pub order_type: String,
     pub uid: i64,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct KolliderClientConfig {
+    pub url: String,
+    pub api_key: String,
+    pub passphrase: String,
+    pub secret: String,
+}
+
+impl KolliderClientConfig {
+    pub fn load_config(
+        config_name: &str,
+    ) -> Result<KolliderClientConfig, Box<dyn std::error::Error>> {
+        let content = fs::read_to_string(config_name)?;
+        Ok(serde_json::from_str::<KolliderClientConfig>(&content)?)
+    }
 }
