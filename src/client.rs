@@ -139,6 +139,23 @@ impl<'a> KolliderClient<'a> {
         Ok(res.json::<OpenOrders>().await?)
     }
 
+    pub async fn get_orders(&self) -> Result<String, KolliderClientError> {
+        let path = "/orders";
+
+        let res = self
+            .client
+            .get(format!(
+                "{}{}?symbol=BTCUSD.PERP&limit=3",
+                self.base_url, path
+            ))
+            .headers(Self::create_get_headers(self, path)?)
+            .send()
+            .await?;
+
+        let result = res.text().await?;
+        Ok(result)
+    }
+
     pub async fn get_open_positions(&self) -> Result<OpenPositions, KolliderClientError> {
         let path = "/positions";
         let res = self
