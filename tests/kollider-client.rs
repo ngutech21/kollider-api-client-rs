@@ -10,6 +10,7 @@ async fn test_get_price_ticker() -> Result<(), Box<dyn std::error::Error>> {
     };
     let client = KolliderClient::new(&cfg.url, &cfg.api_key, &cfg.passphrase, &cfg.secret);
     let _prices = client.get_price_ticker().await?;
+    assert_eq!("BTCUSD.PERP", _prices.symbol);
     Ok(())
 }
 
