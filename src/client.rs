@@ -169,6 +169,7 @@ impl<'a> KolliderClient<'a> {
 
     pub async fn create_order(
         &self,
+        order_side: OrderSide,
         amount_usd: i8,
     ) -> Result<CreateOrderResult, KolliderClientError> {
         let path = "/orders";
@@ -176,10 +177,10 @@ impl<'a> KolliderClient<'a> {
         let request_body = serde_json::json!({
             "price": 20595,
             "order_type": "Market",
-            "side": "Ask",
+            "side": order_side.to_string(),
             "quantity": amount_usd,
             "symbol": "BTCUSD.PERP",
-            "leverage": 20,
+            "leverage": 100,
             "margin_type": "Isolated",
             "settlement_type": "Delayed"
         })

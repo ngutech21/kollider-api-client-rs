@@ -1,3 +1,4 @@
+use std::fmt::Display;
 use std::fs;
 
 use serde_derive::Deserialize;
@@ -172,6 +173,20 @@ pub struct KolliderClientConfig {
     pub api_key: String,
     pub passphrase: String,
     pub secret: String,
+}
+
+pub enum OrderSide {
+    Bid,
+    Ask,
+}
+
+impl Display for OrderSide {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            OrderSide::Ask => f.write_str("Ask"),
+            OrderSide::Bid => f.write_str("Bid"),
+        }
+    }
 }
 
 impl KolliderClientConfig {
