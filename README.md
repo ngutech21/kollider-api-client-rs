@@ -1,3 +1,5 @@
+[![Rust](https://github.com/ngutech21/kollider-api-client-rs/actions/workflows/rust.yml/badge.svg?branch=master)](https://github.com/ngutech21/kollider-api-client-rs/actions/workflows/rust.yml)
+
 # Kollider API Client written in Rust #
 
 ## Progress ##
