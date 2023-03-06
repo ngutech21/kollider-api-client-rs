@@ -15,4 +15,4 @@ serde = "1.0.152"
 serde_derive = "1.0.152"
 serde_json = "1.0.93"
 thiserror = "1.0.38"
-tokio = { version = "1.25.0", features = ["full"] }
+tokio = { version = "1.26.0", features = ["full"] }
